@@ -19,5 +19,6 @@
 
 .grid-areas-player {
   grid-area: page-player;
-  min-height: 75px;
+  min-height: 65px;
+  max-height: 75px;
 }
