@@ -46,23 +46,47 @@ class Player extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      isPlaying: false,
+      isPaused: true,
+      isReady: false,
       audioElement: undefined,
+      videoElement: undefined,
+      queue: [],
     };
   }
 
+  createEvent<EData>(eName: string, data?: EData): Event | CustomEvent<EData> {
+    if (data) {
+      return new CustomEvent<EData>(eName, { detail: data });
+    }
+
+    return new Event(eName);
+  }
+
   componentDidMount(): void {
-    if (!this.state.audioElement) {
+    if (!this.state.audioElement && !this.state.videoElement) {
       this.setState(() => {
         let audio = document.createElement("audio");
         audio.src = playground.src;
         audio.crossOrigin = "anonymous";
-        return { audioElement: audio };
+
+        let video = document.createElement("video");
+        video.src = playground.src;
+        video.crossOrigin = "anonymous";
+
+        return {
+          audioElement: audio,
+          videoElement: video,
+        };
       });
     }
 
     if ("mediaSession" in navigator) {
       this.mediaSession();
     }
+
+    document.addEventListener("playerplay", this.play.bind(this));
+    document.addEventListener("playerpause", this.pause.bind(this));
   }
 
   play() {
@@ -120,7 +144,6 @@ class Player extends React.Component<Props, State> {
           <Metadata />
           <Controls />
           <Options />
-          <button onClick={() => this.play()}>play</button>
         </div>
       </div>
     );
@@ -132,6 +155,11 @@ export default Player;
 interface Props {}
 interface State {
   audioElement: HTMLAudioElement | undefined;
+  videoElement: HTMLVideoElement | undefined;
+  isPlaying: boolean;
+  isPaused: boolean;
+  isReady: boolean;
+  queue: Track[];
 }
 
 interface ArtworkItem {
@@ -147,6 +175,8 @@ interface Track {
   artwork: ArtworkItem[];
   src: string;
 }
+
+type EData = { [key: string]: string };
 
 // interface ArtworkItem_ {
 //   url: string;
