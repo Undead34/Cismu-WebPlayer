@@ -30,7 +30,7 @@ function AudioMotion(props: any) {
 export default function Page() {
   const [isLoading, setLoading] = useState(true);
   const [audioMotion, setAudioMotion] = useState(null);
-
+  console.log("changes");
   useEffect(() => {
     setLoading(false);
 
