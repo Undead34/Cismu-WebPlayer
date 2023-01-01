@@ -1,21 +1,30 @@
-import Image from "next/image";
 import Cover from "../../src/img/cover.jpg";
+import Image from "next/image";
+import { Track } from "./types";
 
-export default function Metadata() {
+interface Props {
+  track: Track;
+}
+
+export default function Metadata(props: Props) {
   return (
-    <div className="flex flex-row items-center">
-      <div className="h-14 w-14">
-        <div>
-          <Image width={500} height={500} src={Cover} alt="Cover" />
+    <div className="w-[30%]">
+      <div className="flex flex-row items-center justify-center">
+        <div className="relative">
+          <div className="h-[56px] w-[56px]">
+            <Image width={56} height={56} src={Cover} alt="Cover" />
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col ">
-        <div>playing</div>
-        <div>artistºalbun</div>
-      </div>
-      <div className="flex-grow">
-        <div>like</div>
-        <div>options</div>
+        <div className="">
+          <div>
+            <span>{props.track.title}</span>
+          </div>
+          <div>{props.track.artist}</div>
+        </div>
+        <div className="">
+          <div>like</div>
+          <div>options</div>
+        </div>
       </div>
     </div>
   );

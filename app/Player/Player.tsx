@@ -5,6 +5,7 @@ import Controls from "./Controls";
 import Options from "./Options";
 import Slider from "./Slider";
 import Metadata from "./Metadata";
+import { ArtworkItem, Track, EData } from "./types";
 
 const playground: Track = {
   title: "Playground (from the series Arcane League of Legends)",
@@ -136,19 +137,52 @@ class Player extends React.Component<Props, State> {
 
   render(): React.ReactNode {
     return (
-      <div className="relative flex h-full w-full flex-col">
-        <div className="absolute w-full -translate-y-full">
+      <div className="flex h-full flex-col items-center">
+        <div className="w-full">
           <Slider />
         </div>
-        <div className="flex h-full w-full flex-row">
-          <Metadata />
-          <Controls />
-          <Options />
+        <div className="h-full w-full">
+          <div className="flex h-full flex-row">
+            <Metadata track={playground} />
+            <Controls />
+            <Options />
+          </div>
         </div>
+        <button
+          onClick={() => {
+            const customEventCount = new CustomEvent("playergetsource", {
+              detail: this.state.audioElement,
+            });
+            document.dispatchEvent(customEventCount);
+          }}
+        >
+          Active AudioMotion
+        </button>
       </div>
     );
   }
 }
+
+// -webkit-box-orient: vertical;
+// -webkit-box-direction: normal;
+// background-color: #181818;
+// border-top: 1px solid #282828;
+// display: -webkit-box;
+// display: -ms-flexbox;
+// display: flex;
+// -ms-flex-direction: column;
+// flex-direction: column;
+// height: auto;
+// min-width: 620px;
+// -webkit-user-select: none;
+// -moz-user-select: none;
+// -ms-user-select: none;
+// user-select: none;
+
+// display: grid;
+// grid-template-columns: 1fr 1fr 1fr;
+// grid-template-rows: 1fr;
+// grid-auto-flow: column;
 
 export default Player;
 
@@ -161,22 +195,6 @@ interface State {
   isReady: boolean;
   queue: Track[];
 }
-
-interface ArtworkItem {
-  src: string;
-  sizes: "96x96" | "128x128" | "256x256" | "384x384" | "512x512";
-  type: string;
-}
-
-interface Track {
-  title: string;
-  artist: string | string[];
-  album: string;
-  artwork: ArtworkItem[];
-  src: string;
-}
-
-type EData = { [key: string]: string };
 
 // interface ArtworkItem_ {
 //   url: string;
